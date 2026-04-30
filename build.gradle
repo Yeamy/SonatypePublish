@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '2.1.1'
+}
+
+group = 'io.github.yeamy'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    annotationProcessor gradleApi()
+
+    testImplementation platform('org.junit:junit-bom:6.0.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// 注册插件ID与实现类（自动生成 META-INF 描述符）
+gradlePlugin {
+    website = 'https://github.com/yeamy/SonatypePublish'
+    vcsUrl = 'https://github.com/yeamy/SonatypePublish'
+
+    plugins {
+        sonatypePublish {
+            id = 'io.github.yeamy.sonatype-publish'  // 插件ID（唯一）
+            implementationClass = 'io.github.yeamy.sonatype.MainPlugin' // 入口类
+            displayName = 'Sonatype Publish'
+            description = 'Run a local http server to bridge maven-publish and sonatype bearer uploading!'
+            tags.set(['sonatype', 'nexus', 'maven', 'publish', 'upload'])
+            compatibility(it) { // extension added by the Compatibility plugin
+                features {
+                    configurationCache = true // or false if the feature isn't supported
+                }
+            }
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
