@@ -1,6 +1,8 @@
 # Sonatype Publish Gradle Plugin
 English | [中文](README.md)
 
+[![Gradle Plugin Portal Version](https://img.shields.io/gradle-plugin-portal/v/io.github.yeamy.sonatype-publish)](https://plugins.gradle.org/plugin/io.github.yeamy.sonatype-publish)
+
 Gradle plugin for publishing **Maven** library to **Sonatype** server with **maven-publish**.
 
 ## How it work
@@ -13,7 +15,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id 'io.github.yeamy.sonatype-publish'
+    id 'io.github.yeamy.sonatype-publish' version '1.0'
 }
 
 sonatypePublish {
@@ -42,7 +44,7 @@ publishing {
 ```
 
 ## Warning
-- This plugin depend on maven-publish, you must fill publishing info.
+- This plugin depend on `maven-publish`, you must fill publishing(pom) info.
 ```groovy
 plugins {
     id 'maven-publish'
@@ -77,7 +79,7 @@ publishing {
 }
 ```
 
-- if using `localhost` instead of `127.0.0.1` may crush, must allow maven using unsafe request.
+- if using `localhost` instead of `127.0.0.1` may cause exception, must allow unsafe http connection.
 ```groovy
 maven {
     url = 'http://localhost:8082'
@@ -87,10 +89,12 @@ maven {
 - when `publish` case exception, the local http server cannot auto close, must close it manually.
 
 ```shell
+#shell
 lsof -i :8082
 kill -9 [PID]
 ``` 
-```cmd
+```shell
+#cmd
 netstat -ano | findstr :8082
 taskkill /F /PID [PID]
 ```
